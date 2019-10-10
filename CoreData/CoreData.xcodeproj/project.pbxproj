@@ -14,6 +14,7 @@
 		385A7832234FC8FB004A87E5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 385A7830234FC8FB004A87E5 /* LaunchScreen.storyboard */; };
 		385A783D234FC8FB004A87E5 /* CoreDataTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A783C234FC8FB004A87E5 /* CoreDataTests.swift */; };
 		385A7848234FC8FB004A87E5 /* CoreDataUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A7847234FC8FB004A87E5 /* CoreDataUITests.swift */; };
+		385A7856234FD28B004A87E5 /* UIColor-theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A7855234FD28B004A87E5 /* UIColor-theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		385A7843234FC8FB004A87E5 /* CoreDataUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreDataUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		385A7847234FC8FB004A87E5 /* CoreDataUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataUITests.swift; sourceTree = "<group>"; };
 		385A7849234FC8FB004A87E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		385A7855234FD28B004A87E5 /* UIColor-theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor-theme.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 			children = (
 				385A7827234FC8FA004A87E5 /* AppDelegate.swift */,
 				385A7829234FC8FA004A87E5 /* ViewController.swift */,
+				385A7855234FD28B004A87E5 /* UIColor-theme.swift */,
 				385A782B234FC8FA004A87E5 /* Main.storyboard */,
 				385A782E234FC8FB004A87E5 /* Assets.xcassets */,
 				385A7830234FC8FB004A87E5 /* LaunchScreen.storyboard */,
@@ -257,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				385A782A234FC8FA004A87E5 /* ViewController.swift in Sources */,
+				385A7856234FD28B004A87E5 /* UIColor-theme.swift in Sources */,
 				385A7828234FC8FA004A87E5 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

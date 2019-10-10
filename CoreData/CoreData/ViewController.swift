@@ -8,13 +8,17 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+private let cellId = "cellId"
+
+class ViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        
+        tableView.backgroundColor = UIColor.tealColor
+        tableView.separatorColor = .white
+        tableView.tableFooterView = UIView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         setupNavigationStyle()
     }
     
@@ -27,13 +31,28 @@ class ViewController: UIViewController {
         navigationItem.title = "Companies"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus"), style: .plain, target: self, action: #selector(handleAddCompany))
         
-        let lightRed = UIColor(displayP3Red: 247/255, green: 66/255, blue: 82/255, alpha: 1)
         navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.barTintColor = lightRed
+        navigationController?.navigationBar.barTintColor = .lightRed
         navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.navigationBar.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
     }
+}
 
 
+// datasource
+extension ViewController {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 8
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        cell.backgroundColor = .tealColor
+        cell.textLabel?.text = "THE COMPANY NAME"
+        cell.textLabel?.textColor = .white
+        cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        return cell
+    }
 }
 
