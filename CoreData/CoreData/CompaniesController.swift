@@ -10,9 +10,15 @@ import UIKit
 
 private let cellId = "cellId"
 
-class CompaniesController: UITableViewController {
+class CompaniesController: UITableViewController, CreateCompanyControllerDelegate {
     
-    let companies = [
+    func didAddCompany(company: Company) {
+        companies.append(company)
+        let newIndexPath = IndexPath(row: companies.count - 1, section: 0)
+        tableView.insertRows(at: [newIndexPath], with: .automatic)
+    }
+    
+    var companies = [
         Company(name: "Apple", founded: Date()),
         Company(name: "Google", founded: Date()),
         Company(name: "Facebook", founded: Date()),
@@ -33,6 +39,7 @@ class CompaniesController: UITableViewController {
     
     @objc func handleAddCompany() {
         let createCompanyController = CreateCompanyController()
+        createCompanyController.delegate = self
         let navController = CustomNavigationController(rootViewController: createCompanyController)
         present(navController, animated: true, completion: nil)
     }
