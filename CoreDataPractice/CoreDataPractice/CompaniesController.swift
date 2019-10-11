@@ -49,6 +49,7 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         
         navigationItem.title = "Companies"
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Reset", style: .plain, target: self, action: #selector(handleReset))
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus"), style: .plain, target: self, action: #selector(handleAddCompany))
     }
     
@@ -61,6 +62,22 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
             self.tableView.reloadData()
         } catch let fetchErr {
             print("Failed to fetch companies:", fetchErr)
+        }
+    }
+    
+    @objc fileprivate func handleReset() {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: Company.fetchRequest())
+        do {
+            try context.execute(batchDeleteRequest)
+            var indexPathsToRemove = [IndexPath]()
+            for i in 0..<companies.count {
+                indexPathsToRemove.append(IndexPath(row: i, section: 0))
+            }
+            companies.removeAll()
+            tableView.deleteRows(at: indexPathsToRemove, with: .left)
+        } catch let err {
+            print(err)
         }
     }
     
@@ -108,6 +125,19 @@ extension CompaniesController {
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let label = UILabel()
+        label.text = "No companies available..."
+        label.textColor = .white
+        label.textAlignment = .center
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        return label
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return companies.isEmpty ? 150 : 0
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
