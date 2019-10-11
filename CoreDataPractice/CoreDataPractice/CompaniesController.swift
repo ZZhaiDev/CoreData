@@ -80,7 +80,16 @@ extension CompaniesController {
         
         let company = companies[indexPath.row]
         
-        cell.textLabel?.text = company.name
+        if let name = company.name, let founded = company.founded {
+            let dataFormatter = DateFormatter()
+            dataFormatter.dateFormat = "MMM dd, yyyy"
+            let foundedDateString = dataFormatter.string(from: founded)
+            let dataString = "\(name) - Founded: \(foundedDateString)"
+            cell.textLabel?.text = dataString
+        } else {
+            cell.textLabel?.text = company.name
+        }
+        
         cell.textLabel?.textColor = .white
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         return cell
