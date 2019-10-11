@@ -93,13 +93,12 @@
 		382D4EDE2351101600DD7BFB /* Company */ = {
 			isa = PBXGroup;
 			children = (
+				382D4EEC23512D4600DD7BFB /* Employees */,
 				385A7829234FC8FA004A87E5 /* CompaniesController.swift */,
 				382D4EDF2351103300DD7BFB /* CompanyCell.swift */,
 				382D4EE1235110B800DD7BFB /* CompaniesController+CreateCompanyDelegate.swift */,
 				382D4EE3235110C500DD7BFB /* CompaniesController+TableView.swift */,
 				385A7859234FDB91004A87E5 /* CreatCompanyController.swift */,
-				382D4EE923511BB100DD7BFB /* CreateEmployeeController.swift */,
-				382D4EE823511BB100DD7BFB /* EmployeesController.swift */,
 			);
 			path = Company;
 			sourceTree = "<group>";
@@ -110,6 +109,15 @@
 				382D4EE623511B7D00DD7BFB /* UIViewController+Helper.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		382D4EEC23512D4600DD7BFB /* Employees */ = {
+			isa = PBXGroup;
+			children = (
+				382D4EE823511BB100DD7BFB /* EmployeesController.swift */,
+				382D4EE923511BB100DD7BFB /* CreateEmployeeController.swift */,
+			);
+			path = Employees;
 			sourceTree = "<group>";
 		};
 		385A781B234FC8FA004A87E5 = {
