@@ -89,5 +89,30 @@ extension CompaniesController {
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50
     }
+    
+    override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        let deleteAction = UITableViewRowAction(style: .destructive, title: "Delete") { (_, indexPath) in
+            let company = self.companies[indexPath.row]
+            
+            // 1. remove from dataSource
+            self.companies.remove(at: indexPath.row)
+            // 2. remove from tableView
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
+            // 3. remove from coreData
+            let context = CoreDataManager.shared.persistentContainer.viewContext
+            context.delete(company)
+            
+            do {
+                try context.save()
+            } catch let err {
+                print("Failed to delete company:", err)
+            }
+        }
+        let editAction = UITableViewRowAction(style: .normal, title: "Edit") { (_, indexPath) in
+            
+        }
+        
+        return [deleteAction, editAction]
+    }
 }
 
