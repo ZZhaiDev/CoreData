@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 private let cellId = "cellId"
 
@@ -18,23 +19,13 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         tableView.insertRows(at: [newIndexPath], with: .automatic)
     }
     
-    var companies = [
-        Company(name: "Apple", founded: Date()),
-        Company(name: "Google", founded: Date()),
-        Company(name: "Facebook", founded: Date()),
-        Company(name: "Apple", founded: Date()),
-        Company(name: "Google", founded: Date()),
-        Company(name: "Facebook", founded: Date())
-        ]
+    var companies = [Company]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.backgroundColor = UIColor.tealColor
-        tableView.separatorColor = .white
-        tableView.tableFooterView = UIView()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
-        setupNavigationStyle()
+        fetchCompanies()
+        setupUI()
     }
     
     @objc func handleAddCompany() {
@@ -44,13 +35,30 @@ class CompaniesController: UITableViewController, CreateCompanyControllerDelegat
         present(navController, animated: true, completion: nil)
     }
     
-    fileprivate func setupNavigationStyle() {
+    fileprivate func setupUI() {
+        
+        tableView.backgroundColor = UIColor.tealColor
+        tableView.separatorColor = .white
+        tableView.tableFooterView = UIView()
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         
         navigationItem.title = "Companies"
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(named: "plus"), style: .plain, target: self, action: #selector(handleAddCompany))
-        
-        
     }
+    
+    fileprivate func fetchCompanies() {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<Company>(entityName: "Company")
+        do {
+            let companies = try context.fetch(fetchRequest)
+            self.companies = companies
+            self.tableView.reloadData()
+        } catch let fetchErr {
+            print("Failed to fetch companies:", fetchErr)
+        }
+    }
+    
+    
 }
 
 
