@@ -23,6 +23,9 @@ class CreateCompanyController: UIViewController {
             nameTextField.text = company?.name
             guard let date = company?.founded else { return }
             datePicker.date = date
+            if let imageData = company?.imageData, let image = UIImage(data: imageData) {
+                companyImageView.image = image
+            }
         }
     }
     
@@ -47,6 +50,26 @@ class CreateCompanyController: UIViewController {
         return dp
     }()
     
+    lazy var companyImageView: UIImageView = {
+       let imageView = UIImageView(image: #imageLiteral(resourceName: "select_photo_empty"))
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.isUserInteractionEnabled = true
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectPhoto)))
+        
+        imageView.layer.cornerRadius = imageView.frame.width / 2
+        imageView.clipsToBounds = true
+        imageView.layer.borderColor = UIColor.darkBlue.cgColor
+        imageView.layer.borderWidth = 2
+        return imageView
+    }()
+    
+    @objc fileprivate func handleSelectPhoto() {
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -66,6 +89,12 @@ class CreateCompanyController: UIViewController {
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         company.setValue(nameTextField.text, forKey: "name")
         company.setValue(datePicker.date, forKey: "founded")
+        
+        if let companyImage = companyImageView.image {
+            let imageData = companyImage.jpegData(compressionQuality: 0.7)
+            company.setValue(imageData, forKey: "imageData")
+        }
+        
         do {
             try context.save()
             dismiss(animated: true) {
@@ -80,6 +109,12 @@ class CreateCompanyController: UIViewController {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         company?.name = nameTextField.text
         company?.founded = datePicker.date
+        
+        if let companyImage = companyImageView.image {
+            let imageData = companyImage.jpegData(compressionQuality: 0.7)
+            company?.imageData = imageData
+        }
+        
         do {
             try context.save()
             dismiss(animated: true) {
@@ -100,7 +135,6 @@ class CreateCompanyController: UIViewController {
     }
     
     private func setupUI() {
-        
         let lightBlueBackgroundView = UIView()
         lightBlueBackgroundView.backgroundColor = UIColor.lightBlue
         lightBlueBackgroundView.translatesAutoresizingMaskIntoConstraints = false
@@ -110,11 +144,17 @@ class CreateCompanyController: UIViewController {
         lightBlueBackgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         lightBlueBackgroundView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         lightBlueBackgroundView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        lightBlueBackgroundView.heightAnchor.constraint(equalToConstant: 250).isActive = true
+        lightBlueBackgroundView.heightAnchor.constraint(equalToConstant: 350).isActive = true
+        
+        view.addSubview(companyImageView)
+        companyImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 8).isActive = true
+        companyImageView.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        companyImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        companyImageView.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
         
         view.addSubview(nameLabel)
-        nameLabel.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        nameLabel.topAnchor.constraint(equalTo: companyImageView.bottomAnchor).isActive = true
         nameLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16).isActive = true
         
         
@@ -129,6 +169,8 @@ class CreateCompanyController: UIViewController {
         nameTextField.bottomAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
         nameTextField.topAnchor.constraint(equalTo: nameLabel.topAnchor).isActive = true
         
+        // setup the date picker here
+        
         view.addSubview(datePicker)
         datePicker.topAnchor.constraint(equalTo: nameLabel.bottomAnchor).isActive = true
         datePicker.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -140,5 +182,21 @@ class CreateCompanyController: UIViewController {
     @objc func handleCancel() {
         dismiss(animated: true, completion: nil)
     }
+}
+
+
+// MARK: - UIImagePickerControllerDelegate
+extension CreateCompanyController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
     
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let editImage = info[.editedImage] as? UIImage {
+            companyImageView.image = editImage
+        } else if let originalImage = info[.originalImage] as? UIImage {
+            companyImageView.image = originalImage
+        }
+        dismiss(animated: true, completion: nil)
+    }
 }
