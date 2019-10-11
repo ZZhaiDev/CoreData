@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		382D4EE02351103300DD7BFB /* CompanyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382D4EDF2351103300DD7BFB /* CompanyCell.swift */; };
+		382D4EE2235110B800DD7BFB /* CompaniesController+CreateCompanyDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382D4EE1235110B800DD7BFB /* CompaniesController+CreateCompanyDelegate.swift */; };
+		382D4EE4235110C500DD7BFB /* CompaniesController+TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 382D4EE3235110C500DD7BFB /* CompaniesController+TableView.swift */; };
 		385A7828234FC8FA004A87E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A7827234FC8FA004A87E5 /* AppDelegate.swift */; };
 		385A782A234FC8FA004A87E5 /* CompaniesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 385A7829234FC8FA004A87E5 /* CompaniesController.swift */; };
 		385A782D234FC8FA004A87E5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 385A782B234FC8FA004A87E5 /* Main.storyboard */; };
@@ -37,6 +40,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		382D4EDF2351103300DD7BFB /* CompanyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyCell.swift; sourceTree = "<group>"; };
+		382D4EE1235110B800DD7BFB /* CompaniesController+CreateCompanyDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompaniesController+CreateCompanyDelegate.swift"; sourceTree = "<group>"; };
+		382D4EE3235110C500DD7BFB /* CompaniesController+TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CompaniesController+TableView.swift"; sourceTree = "<group>"; };
 		385A7824234FC8FA004A87E5 /* CoreDataPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreDataPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		385A7827234FC8FA004A87E5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		385A7829234FC8FA004A87E5 /* CompaniesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompaniesController.swift; sourceTree = "<group>"; };
@@ -78,6 +84,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		382D4EDE2351101600DD7BFB /* Company */ = {
+			isa = PBXGroup;
+			children = (
+				385A7829234FC8FA004A87E5 /* CompaniesController.swift */,
+				382D4EDF2351103300DD7BFB /* CompanyCell.swift */,
+				382D4EE1235110B800DD7BFB /* CompaniesController+CreateCompanyDelegate.swift */,
+				382D4EE3235110C500DD7BFB /* CompaniesController+TableView.swift */,
+			);
+			path = Company;
+			sourceTree = "<group>";
+		};
 		385A781B234FC8FA004A87E5 = {
 			isa = PBXGroup;
 			children = (
@@ -99,8 +116,8 @@
 		385A7826234FC8FA004A87E5 /* CoreDataPractice */ = {
 			isa = PBXGroup;
 			children = (
+				382D4EDE2351101600DD7BFB /* Company */,
 				385A7827234FC8FA004A87E5 /* AppDelegate.swift */,
-				385A7829234FC8FA004A87E5 /* CompaniesController.swift */,
 				385A7855234FD28B004A87E5 /* UIColor-theme.swift */,
 				385A7857234FDB7C004A87E5 /* Company.swift */,
 				385A7859234FDB91004A87E5 /* CreatCompanyController.swift */,
@@ -248,8 +265,11 @@
 				385A782A234FC8FA004A87E5 /* CompaniesController.swift in Sources */,
 				385A785A234FDB91004A87E5 /* CreatCompanyController.swift in Sources */,
 				385A7856234FD28B004A87E5 /* UIColor-theme.swift in Sources */,
+				382D4EE2235110B800DD7BFB /* CompaniesController+CreateCompanyDelegate.swift in Sources */,
+				382D4EE02351103300DD7BFB /* CompanyCell.swift in Sources */,
 				385A786023500225004A87E5 /* CoreDataPracticeModel.xcdatamodeld in Sources */,
 				385A7828234FC8FA004A87E5 /* AppDelegate.swift in Sources */,
+				382D4EE4235110C500DD7BFB /* CompaniesController+TableView.swift in Sources */,
 				385A786223500280004A87E5 /* CoreDataManager.swift in Sources */,
 				385A7858234FDB7C004A87E5 /* Company.swift in Sources */,
 			);
