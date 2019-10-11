@@ -11,11 +11,18 @@ import CoreData
 
 protocol CreateCompanyControllerDelegate: class{
     func didAddCompany(company: Company)
+    func didEditCompany(company: Company)
 }
 
 class CreateCompanyController: UIViewController {
     
     weak var delegate: CreateCompanyControllerDelegate?
+    
+    var company: Company? {
+        didSet {
+            nameTextField.text = company?.name
+        }
+    }
     
     let nameLabel: UILabel = {
         let label = UILabel()
@@ -45,8 +52,7 @@ class CreateCompanyController: UIViewController {
         view.backgroundColor = UIColor.darkBlue
     }
     
-    @objc private func handleSave() {
-        
+    fileprivate func createCompany() {
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let company = NSEntityDescription.insertNewObject(forEntityName: "Company", into: context)
         company.setValue(nameTextField.text, forKey: "name")
@@ -58,6 +64,28 @@ class CreateCompanyController: UIViewController {
         } catch let saveErr {
             print("Failed to save Company:", saveErr)
         }
+    }
+    
+    fileprivate func saveCompanyChanges() {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        company?.name = nameTextField.text
+        do {
+            try context.save()
+            dismiss(animated: true) {
+                self.delegate?.didEditCompany(company: self.company!)
+            }
+        } catch let err {
+            print(err)
+        }
+    }
+    
+    @objc private func handleSave() {
+        if company == nil {
+          createCompany()
+        } else {
+            saveCompanyChanges()
+        }
+        
     }
     
     private func setupUI() {
