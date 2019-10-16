@@ -36,14 +36,8 @@ class EmployeesController: UITableViewController, CreateEmployeeControllerDelega
     }
     
     fileprivate func fetchEmployees() {
-        let context = CoreDataManager.shared.persistentContainer.viewContext
-        let request = NSFetchRequest<Employee>(entityName: "Employee")
-        do {
-            let employees = try context.fetch(request)
-            self.employees = employees
-        } catch let err {
-            print(err)
-        }
+        guard let companyEmployees = company?.employee?.allObjects as? [Employee] else { return }
+        self.employees = companyEmployees
     }
     
     @objc private func handleAdd() {
@@ -51,6 +45,7 @@ class EmployeesController: UITableViewController, CreateEmployeeControllerDelega
         
         let createEmployeeController = CreateEmployeeController()
         createEmployeeController.delegate = self
+        createEmployeeController.company = company
         let navController = UINavigationController(rootViewController: createEmployeeController)
         present(navController, animated: true, completion: nil)
     }
