@@ -28,7 +28,7 @@
   <img width="139" height="301" src="https://github.com/zijiazhai/CoreData/blob/master/githubImages/Snip20191016_1.png">
 </p>
 
-* After saved coreData in background thread, updating UI in main thread will not take effect. Because every time we make changes in background thread, the main thread does not aware that changes.
+* After saved coreData in background thread, updating UI in main thread will not take effect. Because every time we make changes in background thread(backgroundContext), the main thread(viewContext) does not aware that changes.
 * We can use viewContext.reset(), but its not a good idea because reset will forget all of the objects you have fetch before.
 * Ex. of bad example
 ```swift
