@@ -163,6 +163,7 @@ class CreateCompanyController: UIViewController {
         datePicker.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         datePicker.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         datePicker.bottomAnchor.constraint(equalTo: lightBlueBackgroundView.bottomAnchor).isActive = true
+        
     }
     
     @objc func handleCancel() {
