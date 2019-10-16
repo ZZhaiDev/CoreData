@@ -30,7 +30,7 @@
 
 * After saved coreData in background thread, updating UI in main thread will not take effect. Because every time we make changes in background thread(backgroundContext), the main thread(viewContext) does not aware that changes.
 * We can use viewContext.reset(), but its not a good idea because reset will forget all of the objects you have fetch before.
-* Ex. of bad example
+* Ex. of **bad example**
 ```swift
         @objc private func doUpdates() {
         CoreDataManager.shared.persistentContainer.performBackgroundTask { (backgroundContext) in
@@ -58,6 +58,49 @@
                 }
             } catch let err {
                 print("Failed to fetch companies on background:", err)
+            }
+        }
+    }
+```
+
+<p float="left">
+  <img width="139" height="301" src="https://github.com/zijiazhai/CoreData/blob/master/githubImages/Snip20191016_2.png">
+</p>
+
+* Nested Parent Child Context Relationship
+* Ex. of **Good Example**
+```swift
+        @objc private func doNestedUpdates() {
+        DispatchQueue.global(qos: .background).async {
+            let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+            privateContext.parent = CoreDataManager.shared.persistentContainer.viewContext
+            
+            let request: NSFetchRequest<Company> = Company.fetchRequest()
+            request.fetchLimit = 1
+            do {
+                let companies = try privateContext.fetch(request)
+                companies.forEach({ (company) in
+                    print(company.name ?? "")
+                    company.name = "D: \(company.name ?? "")"
+                })
+                do {
+                    try privateContext.save()
+                    DispatchQueue.main.async {
+                        do {
+                           let context = CoreDataManager.shared.persistentContainer.viewContext
+                            if context.hasChanges {
+                               try context.save()
+                            }
+                            self.tableView.reloadData()
+                        } catch let finalSaveErr {
+                            print("Failed to save main context:", finalSaveErr)
+                        }
+                    }
+                } catch let saveErr {
+                    print("Failed to save on private context:", saveErr)
+                }
+            } catch let fetchErr {
+                print("Failed to fetch on private context:", fetchErr)
             }
         }
     }
