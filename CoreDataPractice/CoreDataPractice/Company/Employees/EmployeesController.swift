@@ -26,7 +26,7 @@ class EmployeesController: UITableViewController, CreateEmployeeControllerDelega
     func didAddEmployee(employee: Employee) {
         guard let section = employeeTypes.firstIndex(of: employee.type!) else { return }
         let row = allEmployees[section].count
-        allEmployees[section].append(employee)
+        allEmployees[section].append(employee )
         tableView.insertRows(at: [IndexPath(row: row, section: section)], with: .middle)
         
     }
