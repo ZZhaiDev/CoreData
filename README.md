@@ -1,4 +1,6 @@
 # CoreData
+## Purpose
+* Practicing of CRUD, Thread Safe Operation, NSFetchedResultsController, JSon to Core Data, and Migration.
 
 ### Thread Safe
 * `CoreDataManager.shared.persistentContainer.viewContext` is **NOT** thread safe, 
