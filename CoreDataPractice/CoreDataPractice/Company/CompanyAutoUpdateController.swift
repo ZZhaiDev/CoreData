@@ -35,7 +35,7 @@ class CompanyAutoUpdateController: UITableViewController {
     
     @objc fileprivate func handleDelete() {
         let request: NSFetchRequest<Company> = Company.fetchRequest()
-        request.predicate = NSPredicate(format: "name CONTAINS %@", "B")
+//        request.predicate = NSPredicate(format: "name CONTAINS %@", "B")
         let context = CoreDataManager.shared.persistentContainer.viewContext
         let companysWithB = try? context.fetch(request)
         companysWithB?.forEach({ (company) in
@@ -50,10 +50,20 @@ class CompanyAutoUpdateController: UITableViewController {
         navigationItem.leftBarButtonItems = [UIBarButtonItem(title: "Add", style: .plain, target: self, action:             #selector(handleAdd)),
                                              UIBarButtonItem(title: "Delete", style: .plain, target: self, action: #selector(handleDelete))
         ]
+        tableView.backgroundColor = UIColor.darkBlue
         tableView.register(CompanyCell.self, forCellReuseIdentifier: cellId)
-        fetchedResultsController.fetchedObjects?.forEach({ (company) in
-            print(company.name ?? "")
-        })
+            
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        refreshControl.tintColor = .white
+        
+        self.refreshControl = refreshControl
+        
+    }
+    
+    @objc func handleRefresh() {
+        Service.shared.downloadCompaniesFromServer()
+        self.refreshControl?.endRefreshing()
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -90,6 +100,13 @@ class CompanyAutoUpdateController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 44
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let employeesListController = EmployeesController()
+        employeesListController.company = fetchedResultsController.object(at: indexPath)
+        
+        navigationController?.pushViewController(employeesListController, animated: true)
     }
 
 }
