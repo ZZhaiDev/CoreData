@@ -37,8 +37,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow()
         window?.makeKeyAndVisible()
-        let companiesController = CompaniesController()
-        window?.rootViewController = CustomNavigationController(rootViewController: companiesController)
+        
+        fatalError("Choose one of two to start")
+//        let companiesController = CompaniesController()
+//        window?.rootViewController = CustomNavigationController(rootViewController: companiesController)
+        
+//        let companiesAutoUpdateController = CompanyAutoUpdateController()
+//        window?.rootViewController = CustomNavigationController(rootViewController: companiesAutoUpdateController)
+        
+        
         
         return true
     }
