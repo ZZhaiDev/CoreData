@@ -169,3 +169,63 @@
     }
 ```
 
+### JSon to Core Data
+* Retreived Json data from sever in background thread, convert to Core Data using `let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)`
+```swift
+        func downloadCompaniesFromServer() {
+        
+        guard let url = URL(string: urlString) else { return }
+        URLSession.shared.dataTask(with: url) { (data, resp, err) in
+            if let err = err {
+                print("Failed to download companies:", err)
+                return
+            }
+            
+            guard let data = data else { return }
+            do {
+                let jsonCompanies = try JSONDecoder().decode([JSONCompany].self, from: data)
+                let privateContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+                privateContext.parent = CoreDataManager.shared.persistentContainer.viewContext
+                
+                jsonCompanies.forEach({ (jsonCompany) in
+                    let company = Company(context: privateContext)
+                    company.name = jsonCompany.name
+                    
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "MM/dd/yyyy"
+                    let foundedDate = dateFormatter.date(from: jsonCompany.founded)
+                    company.founded = foundedDate
+                    
+                    jsonCompany.employees?.forEach({ (jsonEmployee) in
+                        let employee = Employee(context: privateContext)
+                        employee.name = jsonEmployee.name
+                        employee.type = jsonEmployee.type
+                        
+                        let employeeInformation = EmployeeInformation(context: privateContext)
+                        let birthdayDate = dateFormatter.date(from: jsonEmployee.birthday)
+                        
+                        employeeInformation.birthday = birthdayDate
+                        employee.employeeInformation = employeeInformation
+                        employee.company = company
+                    })
+                    
+                    do {
+                        try privateContext.save()
+                        try privateContext.parent?.save()
+                        
+                    } catch let saveErr {
+                        print("Failed to save companies:", saveErr)
+                    }
+                    
+                })
+                
+            } catch let jsonDecodeErr {
+                print("Failed to decode:", jsonDecodeErr)
+            }
+            
+            }.resume()
+    }
+}
+
+```
+
