@@ -106,3 +106,66 @@
     }
 ```
 
+### NSFetchedResultsController
+* **NSFetchedResultsController** A controller that you use to manage the results of a Core Data fetch request and display data to the user.
+
+```swift
+    lazy var fetchedResultsController: NSFetchedResultsController<Company> = { [weak self] in
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let request: NSFetchRequest<Company> = Company.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: "name", cacheName: nil)
+        frc.delegate = self
+        do {
+            try frc.performFetch()
+        } catch let err {
+            print(err)
+        }
+        return frc
+    }()
+    
+    @objc fileprivate func handleAdd() {
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let company = Company(context: context)
+        company.name = "BMW"
+        try? context.save()
+    }
+    
+    @objc fileprivate func handleDelete() {
+        let request: NSFetchRequest<Company> = Company.fetchRequest()
+        request.predicate = NSPredicate(format: "name CONTAINS %@", "B")
+        let context = CoreDataManager.shared.persistentContainer.viewContext
+        let companysWithB = try? context.fetch(request)
+        companysWithB?.forEach({ (company) in
+            context.delete(company)
+        })
+        try? context.save()
+    }
+```
+* DataSource, Delegate
+```swift
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label = IndentedLabel()
+        label.text = fetchedResultsController.sectionIndexTitles[section]
+        label.backgroundColor = UIColor.lightBlue
+        return label
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return fetchedResultsController.sections?.count ?? 0
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return fetchedResultsController.sections![section].numberOfObjects
+    }
+    
+    
+    let cellId = "cellId"
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! CompanyCell
+        let company = fetchedResultsController.object(at: indexPath)
+        cell.company = company
+        return cell
+    }
+```
+
